@@ -11,6 +11,7 @@ if "initialized" not in st.session_state:
     st.session_state.score = 0
     st.session_state.game_over = False
     st.session_state.message = "🌍 Welcome to Islands of Discovery!"
+    st.session_state.selected_island = None
     st.session_state.action_taken = False
     st.session_state.initialized = True
 
@@ -30,12 +31,14 @@ def survey(island_index):
     st.session_state.message = f"Survey at {st.session_state.islands[island_index]}: {clue}"
     st.session_state.turns -= 1
     st.session_state.action_taken = True
+    st.session_state.selected_island = None
     check_end()
 
 def excavate(island_index):
     if st.session_state.excavated[island_index]:
         st.session_state.message = f"You already excavated {st.session_state.islands[island_index]}."
         st.session_state.action_taken = True
+        st.session_state.selected_island = None
         return
 
     st.session_state.excavated[island_index] = True
@@ -58,6 +61,7 @@ def excavate(island_index):
 
     st.session_state.turns -= 1
     st.session_state.action_taken = True
+    st.session_state.selected_island = None
     check_end()
 
 def check_end():
@@ -74,10 +78,11 @@ def reset_game():
     st.session_state.score = 0
     st.session_state.game_over = False
     st.session_state.message = "🌍 New expedition started!"
+    st.session_state.selected_island = None
     st.session_state.action_taken = False
 
 def next_turn():
-    st.session_state.message = "Choose your next action."
+    st.session_state.message = "Choose your next island."
     st.session_state.action_taken = False
 
 # --- UI ---
@@ -89,35 +94,49 @@ st.sidebar.write(f"⏳ Turns Left: **{st.session_state.turns}**")
 if st.sidebar.button("🔄 Restart Game"):
     reset_game()
 
-# --- Info Dropdown ---
+# --- Info dropdown ---
 with st.expander("ℹ️ How to Play"):
     st.markdown("""
-    **🎯 Goal:** Discover the hidden ruins before you run out of turns!  
+    **🎯 Goal:** Find the hidden ruins before you run out of turns!  
     Each action uses **1 turn**, and you start with **5 turns**.
 
     **🔎 Survey:**  
     - Searches the surface for clues.  
-    - Results may include:  
-        - 🏺 **Ruins markings** → The correct island!  
-        - 🔎 **Pottery fragments** → Very close.  
-        - 🦴 **Ancient bones** → Activity nearby.  
-        - 🌊 **Just shells** → Nothing nearby.
+      - 🏺 Ruins markings → The correct island  
+      - 🔎 Pottery fragments → Very close  
+      - 🦴 Ancient bones → Nearby activity  
+      - 🌊 Just shells → Nothing nearby  
 
     **⛏️ Excavate:**  
-    - Digs deeper on the chosen island.  
-    - You might find valuable artifacts for points.  
-    - Find the ruins → **100 points** and instant victory! 🏆
+    - Digs deeper on that island.  
+    - You may find ancient items for points or even the ruins (100 pts)!
     """)
 
-# --- Main Layout ---
 st.info(st.session_state.message)
 
 if not st.session_state.game_over:
     if not st.session_state.action_taken:
-        island_choice = st.selectbox("🌴 Choose an island:", st.session_state.islands)
-        island_index = st.session_state.islands.index(island_choice)
-        action = st.radio("Select an action:", ["Survey", "Excavate"])
-        st.button("✅ Confirm", on_click=survey if action == "Survey" else excavate, args=(island_index,))
+        if st.session_state.selected_island is None:
+            st.subheader("🌴 Choose an island:")
+            cols = st.columns(2)
+            for i, island in enumerate(st.session_state.islands):
+                if i % 2 == 0:
+                    with cols[0]:
+                        st.button(island, key=f"island_{i}", on_click=lambda idx=i: st.session_state.update(selected_island=idx))
+                else:
+                    with cols[1]:
+                        st.button(island, key=f"island_{i}", on_click=lambda idx=i: st.session_state.update(selected_island=idx))
+        else:
+            island_name = st.session_state.islands[st.session_state.selected_island]
+            st.subheader(f"🏝️ {island_name}")
+            st.write("What would you like to do here?")
+            col1, col2, col3 = st.columns([1, 1, 1])
+            with col1:
+                st.button("🔎 Survey", on_click=survey, args=(st.session_state.selected_island,))
+            with col2:
+                st.button("⛏️ Excavate", on_click=excavate, args=(st.session_state.selected_island,))
+            with col3:
+                st.button("↩️ Back", on_click=lambda: st.session_state.update(selected_island=None))
     else:
         st.button("➡️ Next Turn", on_click=next_turn)
 else:
