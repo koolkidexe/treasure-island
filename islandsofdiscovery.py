@@ -13,7 +13,7 @@ if "initialized" not in st.session_state:
     st.session_state.message = "🌍 Welcome to Islands of Discovery!"
     st.session_state.selected_island = None
     st.session_state.action_taken = False
-    st.session_state.revealed_coords = False  # new flag to avoid repeating the message
+    st.session_state.revealed_coords = False
     st.session_state.initialized = True
 
 # --- Game logic ---
@@ -46,7 +46,7 @@ def excavate(island_index):
 
     if island_index == st.session_state.correct_island:
         st.session_state.score += 100
-        st.session_state.message = f"🎉 You found the ancient ruins on {st.session_state.islands[island_index]}! 🏆 Final Score: {st.session_state.score}"
+        st.session_state.message = f"🎉 You found the ancient ruins on {st.session_state.islands[island_index]}!"
         st.session_state.game_over = True
     else:
         finds = [
@@ -68,13 +68,16 @@ def excavate(island_index):
 def check_end():
     # End due to turns
     if st.session_state.turns <= 0 and not st.session_state.game_over:
-        st.session_state.message += f"\n⏳ Out of time! The ruins remain undiscovered. Final Score: {st.session_state.score}"
         st.session_state.game_over = True
+        st.session_state.message = (
+            f"⏳ Out of time! The ruins remain undiscovered.<br>"
+            f"Final Score: {st.session_state.score}"
+        )
 
     # Reveal coordinates if score >= 100, only once
     if st.session_state.score >= 100 and not st.session_state.revealed_coords:
         st.session_state.message += (
-            f"\n You won! You got {st.session_state.score} points.\n"
+            f"<br>📍🏆 You won! You got {st.session_state.score} points.<br>"
             f"📍 Here are the coordinates: (32N, 48E)"
         )
         st.session_state.revealed_coords = True
@@ -123,7 +126,8 @@ with st.expander("ℹ️ How to Play"):
     - You may find ancient items for points or even the ruins (100 pts)!
     """)
 
-st.info(st.session_state.message)
+# Display message using Markdown for proper line breaks
+st.markdown(st.session_state.message, unsafe_allow_html=True)
 
 if not st.session_state.game_over:
     if not st.session_state.action_taken:
