@@ -68,11 +68,17 @@ def excavate(island_index):
 def check_end():
     # End due to turns
     if st.session_state.turns <= 0 and not st.session_state.game_over:
+        st.session_state.message += f"\n⏳ Out of time! The ruins remain undiscovered. Final Score: {st.session_state.score}"
         st.session_state.game_over = True
-        st.session_state.message = (
-            f"⏳ Out of time! The ruins remain undiscovered.<br>"
-            f"Final Score: {st.session_state.score}"
+
+    # Reveal coordinates if score >= 100, only once
+    if st.session_state.score >= 100 and not st.session_state.revealed_coords:
+        st.session_state.message += (
+            f"\n📍🏆 You won! You got {st.session_state.score} points.\n"
+            f"📍 Here are the coordinates: (32N, 48E)"
         )
+        st.session_state.revealed_coords = True
+
 
     # Reveal coordinates if score >= 100, only once
     if st.session_state.score >= 100 and not st.session_state.revealed_coords:
