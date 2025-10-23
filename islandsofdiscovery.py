@@ -13,6 +13,7 @@ if "initialized" not in st.session_state:
     st.session_state.message = "🌍 Welcome to Islands of Discovery!"
     st.session_state.selected_island = None
     st.session_state.action_taken = False
+    st.session_state.revealed_coords = False  # new flag to avoid repeating the message
     st.session_state.initialized = True
 
 # --- Game logic ---
@@ -65,17 +66,19 @@ def excavate(island_index):
     check_end()
 
 def check_end():
+    # End due to turns
     if st.session_state.turns <= 0 and not st.session_state.game_over:
         st.session_state.message += f"\n⏳ Out of time! The ruins remain undiscovered. Final Score: {st.session_state.score}"
         st.session_state.game_over = True
 
-    # 🗺️ Reveal coordinates if score >= 100
-    if st.session_state.score >= 100 and not st.session_state.game_over:
-        correct_island_name = st.session_state.islands[st.session_state.correct_island]
-        st.session_state.message += (f"\n📍🏆 You won! You got {st.session_state.score} points.\n" 
-                                    f"📍 Here are the coordinates: (32N, 48E)"
-)
-
+    # Reveal the SAME message (no island name) when score >= 100,
+    # and only once (using revealed_coords flag)
+    if st.session_state.score >= 100 and not st.session_state.game_over and not st.session_state.revealed_coords:
+        st.session_state.message += (
+            f"\n📍🏆 You won! You got {st.session_state.score} points.\n"
+            f"📍 Here are the coordinates: (32N, 48E)"
+        )
+        st.session_state.revealed_coords = True
 
 def reset_game():
     st.session_state.islands = ["Island A", "Island B", "Island C", "Island D", "Island E"]
@@ -88,6 +91,7 @@ def reset_game():
     st.session_state.message = "🌍 New expedition started!"
     st.session_state.selected_island = None
     st.session_state.action_taken = False
+    st.session_state.revealed_coords = False
 
 def next_turn():
     st.session_state.message = "Choose your next island."
