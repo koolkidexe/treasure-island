@@ -72,8 +72,10 @@ def check_end():
     # 🗺️ Reveal coordinates if score >= 100
     if st.session_state.score >= 100 and not st.session_state.game_over:
         correct_island_name = st.session_state.islands[st.session_state.correct_island]
-        st.session_state.message += f"\n📍🏆 You won! You got {st.session_state.score} points. \n
-                                        📍 Here are the coordinates: (32N, 48E)"
+        st.session_state.message += (f"\n📍🏆 You won! You got {st.session_state.score} points.\n" 
+                                    f"📍 Here are the coordinates: (32N, 48E)"
+)
+
 
 def reset_game():
     st.session_state.islands = ["Island A", "Island B", "Island C", "Island D", "Island E"]
