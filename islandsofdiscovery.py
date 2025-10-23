@@ -77,8 +77,8 @@ def check_end():
     if st.session_state.score >= 100 and not st.session_state.revealed_coords:
         st.session_state.message += (
             f"<br><div style='background-color: #ebf9ed; color: #178237; padding: 10px; border-radius: 4px;'>"
-            f"🏆 You won! You got {st.session_state.score} points.<br>"
-            f"📍 Here are the coordinates: (32N, 48E)"
+            f"🏆 You won! You got **{st.session_state.score} points**.<br>"
+            f"📍 Here are the coordinates: **(32N, 48E)**"
             f"</div>"
         )
         st.session_state.revealed_coords = True
