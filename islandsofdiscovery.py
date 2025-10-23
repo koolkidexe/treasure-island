@@ -73,17 +73,6 @@ def check_end():
             f"⏳ Out of time! The ruins remain undiscovered.<br>"
             f"Final Score: {st.session_state.score}"
         )
-
-    # Reveal coordinates if score >= 100, only once
-    def check_end():
-    # End due to turns
-    if st.session_state.turns <= 0 and not st.session_state.game_over:
-        st.session_state.game_over = True
-        st.session_state.message = (
-            f"⏳ Out of time! The ruins remain undiscovered.<br>"
-            f"Final Score: {st.session_state.score}"
-        )
-
     # Reveal coordinates if score >= 100, only once
     if st.session_state.score >= 100 and not st.session_state.revealed_coords:
         st.session_state.message += (
