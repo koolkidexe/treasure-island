@@ -69,6 +69,12 @@ def check_end():
         st.session_state.message += f"\n⏳ Out of time! The ruins remain undiscovered. Final Score: {st.session_state.score}"
         st.session_state.game_over = True
 
+    # 🗺️ Reveal coordinates if score >= 100
+    if st.session_state.score >= 100 and not st.session_state.game_over:
+        correct_island_name = st.session_state.islands[st.session_state.correct_island]
+        st.session_state.message += f"\n📍🏆 You won! You got {st.session_state.score} points. \n
+                                        📍 Here are the coordinates: (32N, 48E)"
+
 def reset_game():
     st.session_state.islands = ["Island A", "Island B", "Island C", "Island D", "Island E"]
     st.session_state.correct_island = random.randint(0, 4)
@@ -107,7 +113,7 @@ with st.expander("ℹ️ How to Play"):
       - 🦴 Ancient bones → Nearby activity  
       - 🌊 Just shells → Nothing nearby  
 
-    **⛏️ Excavate:**  
+    **⛏️ Excavation:**  
     - Digs deeper on that island.  
     - You may find ancient items for points or even the ruins (100 pts)!
     """)
@@ -134,7 +140,7 @@ if not st.session_state.game_over:
             with col1:
                 st.button("🔎 Survey", on_click=survey, args=(st.session_state.selected_island,))
             with col2:
-                st.button("⛏️ Excavate", on_click=excavate, args=(st.session_state.selected_island,))
+                st.button("⛏️ Excavation", on_click=excavate, args=(st.session_state.selected_island,))
             with col3:
                 st.button("↩️ Back", on_click=lambda: st.session_state.update(selected_island=None))
     else:
