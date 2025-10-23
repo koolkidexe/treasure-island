@@ -83,34 +83,6 @@ def check_end():
         )
         st.session_state.revealed_coords = True
 
-
-
-    # Reveal coordinates if score >= 100, only once
-    if st.session_state.score >= 100 and not st.session_state.revealed_coords:
-        st.session_state.message += (
-            f"\n📍🏆 You won! You got {st.session_state.score} points.\n"
-            f"📍 Here are the coordinates: (32N, 48E)"
-        )
-        st.session_state.revealed_coords = True
-
-
-    # Reveal coordinates if score >= 100, only once
-    if st.session_state.score >= 100 and not st.session_state.revealed_coords:
-        st.session_state.message += (
-            f"<br><span style='color:green; font-weight:bold;'>"
-            f"📍🏆 You won! You got {st.session_state.score} points.<br>"
-            f"📍 Here are the coordinates: (32N, 48E)"
-            f"</span>"
-        )
-        st.session_state.revealed_coords = True
-    # Reveal coordinates if score >= 100, only once
-    if st.session_state.score >= 100 and not st.session_state.revealed_coords:
-        st.session_state.message += (
-            f"<br>🏆 You won! You got {st.session_state.score} points.<br>"
-            f"📍 Here are the coordinates: (32N, 48E)"
-        )
-        st.session_state.revealed_coords = True
-
 def reset_game():
     st.session_state.islands = ["Island A", "Island B", "Island C", "Island D", "Island E"]
     st.session_state.correct_island = random.randint(0, 4)
