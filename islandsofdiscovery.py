@@ -71,9 +71,8 @@ def check_end():
         st.session_state.message += f"\n⏳ Out of time! The ruins remain undiscovered. Final Score: {st.session_state.score}"
         st.session_state.game_over = True
 
-    # Reveal the SAME message (no island name) when score >= 100,
-    # and only once (using revealed_coords flag)
-    if st.session_state.score >= 100 and not st.session_state.game_over and not st.session_state.revealed_coords:
+    # Reveal coordinates if score >= 100, only once
+    if st.session_state.score >= 100 and not st.session_state.revealed_coords:
         st.session_state.message += (
             f"\n📍🏆 You won! You got {st.session_state.score} points.\n"
             f"📍 Here are the coordinates: (32N, 48E)"
