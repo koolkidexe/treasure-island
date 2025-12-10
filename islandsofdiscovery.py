@@ -78,7 +78,7 @@ def check_end():
         st.session_state.message += (
             f"<br><div style='background-color: #ebf9ed; color: #178237; padding: 10px; border-radius: 4px;'>"
             f"🏆 You won! You got **{st.session_state.score} points**.<br>"
-            f"📍 Here are the coordinates: **(32N, 48E)**"
+            f"📍 Here are the coordinates: **(41°43'25" N, 72°34'5" W)**"
             f"</div>"
         )
         st.session_state.revealed_coords = True
